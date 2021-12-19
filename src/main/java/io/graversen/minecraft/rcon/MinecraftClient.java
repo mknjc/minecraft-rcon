@@ -1,7 +1,5 @@
 package io.graversen.minecraft.rcon;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -11,8 +9,11 @@ import java.time.Duration;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Slf4j
+import static java.lang.System.Logger.Level.*;
+
 public class MinecraftClient implements IMinecraftClient {
+    private static final System.Logger log = System.getLogger(MinecraftClient.class.getName());
+
     private static final int RCON_AUTHENTICATION_FAILURE = -1;
     private static final int RCON_COMMAND = 2;
     private static final int RCON_AUTHENTICATION = 3;
@@ -30,7 +31,7 @@ public class MinecraftClient implements IMinecraftClient {
         this.currentRequestCounter = new AtomicInteger(1);
         this.executorService = Executors.newSingleThreadExecutor();
         this.isConnected = true;
-        log.info("Initialized with connection tuple '{}'", connectionTuple);
+        log.log(INFO, "Initialized with connection tuple '" + connectionTuple + "'");
     }
 
     public static MinecraftClient connect(String hostname, String password, int port) {
@@ -43,7 +44,7 @@ public class MinecraftClient implements IMinecraftClient {
             final Future<RconResponse> authenticateResponse = minecraftClient.authenticateClient(password);
             final RconResponse rconResponse = authenticateResponse.get(5000, TimeUnit.MILLISECONDS);
 
-            log.info("Connection success!");
+            log.log(INFO, "Connection success!");
             return minecraftClient;
         } catch (IOException | InterruptedException | ExecutionException e) {
             if (minecraftClient != null) minecraftClient.safeClose();
@@ -62,7 +63,7 @@ public class MinecraftClient implements IMinecraftClient {
             sendRawSilently("ping").get(timeout.toSeconds(), TimeUnit.SECONDS);
             return true;
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            log.error("Lost connection to {}", connectionTuple);
+            log.log(ERROR, "Lost connection to {}", connectionTuple);
             safeClose();
             return false;
         }
@@ -178,11 +179,11 @@ public class MinecraftClient implements IMinecraftClient {
     }
 
     private Future<RconResponse> authenticateClient(String password) {
-        log.debug("Authenticating...");
+        log.log(DEBUG, "Authenticating...");
         return sendRaw(RCON_AUTHENTICATION, password, true);
     }
 
     private void printCommand(String rawCommand) {
-        log.debug("Sending command: {}", rawCommand);
+        log.log(DEBUG, "Sending command: {}", rawCommand);
     }
 }

@@ -1,12 +1,8 @@
 package io.graversen.minecraft.rcon.commands.execute;
 
-import io.graversen.minecraft.rcon.commands.base.BasePositionalCommand;
 import io.graversen.minecraft.rcon.commands.base.ICommand;
 import io.graversen.minecraft.rcon.util.Dimensions;
 import io.graversen.minecraft.rcon.util.Selectors;
-import org.apache.commons.text.StringSubstitutor;
-
-import java.util.Map;
 
 public class ExecuteCommandBuilders {
     private ExecuteCommandBuilders() {
@@ -37,13 +33,7 @@ public class ExecuteCommandBuilders {
         }
 
         public ExecuteCommand run(ICommand command) {
-            final String compiledCommand = StringSubstitutor.replace(
-                    "execute at ${target} run ${command}",
-                    Map.of(
-                            "target", getTarget(),
-                            "command", command.command()
-                    )
-            );
+            final String compiledCommand = "execute at " + getTarget() + " run " + command.command();
 
             return new ExecuteCommand(() -> compiledCommand);
         }
@@ -61,13 +51,7 @@ public class ExecuteCommandBuilders {
         }
 
         public ExecuteCommand run(ICommand command) {
-            final String compiledCommand = StringSubstitutor.replace(
-                    "execute in ${dimension} run ${command}",
-                    Map.of(
-                            "dimension", getDimension().getNamespacedDimensionString(),
-                            "command", command.command()
-                    )
-            );
+            final String compiledCommand = "execute in " + getDimension().getNamespacedDimensionString() + " run " + command.command();
 
             return new ExecuteCommand(() -> compiledCommand);
         }

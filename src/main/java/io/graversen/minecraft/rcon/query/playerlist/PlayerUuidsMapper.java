@@ -2,12 +2,10 @@ package io.graversen.minecraft.rcon.query.playerlist;
 
 import io.graversen.minecraft.rcon.RconResponse;
 import io.graversen.minecraft.rcon.query.IRconResponseMapper;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class PlayerUuidsMapper implements IRconResponseMapper<PlayerUuids> {
     static final Pattern PATTERN_INITIAL = Pattern.compile(":");
@@ -29,11 +27,14 @@ public class PlayerUuidsMapper implements IRconResponseMapper<PlayerUuids> {
         return new PlayerUuids(List.of());
     }
 
+    private static final Pattern PLAYER_NAME_REGEX = Pattern.compile("\\(([a-z0-9-]+)\\)");
+
     private PlayerUuids extractPlayerList(String playersRaw) {
         final var players = Arrays.stream(playersRaw.split(PATTERN_PLAYERS.pattern()))
                 .map(String::trim)
-                .map(player -> StringUtils.substringBetween(player, "(", ")"))
-                .collect(Collectors.toUnmodifiableList());
+                .map(PLAYER_NAME_REGEX::matcher)
+                .map(matcher -> matcher.find() ? matcher.group(1) : "")
+                .toList();
 
         return new PlayerUuids(players);
     }

@@ -1,11 +1,10 @@
 package io.graversen.minecraft.rcon.util;
 
-import lombok.experimental.UtilityClass;
-
-@UtilityClass
 public class ColorUtils {
-    @UtilityClass
+    private ColorUtils() {}
     public static class Qualities {
+        private Qualities() {}
+
         public static Colors common() {
             return Colors.GREEN;
         }

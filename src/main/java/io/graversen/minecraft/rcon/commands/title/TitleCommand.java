@@ -3,9 +3,6 @@ package io.graversen.minecraft.rcon.commands.title;
 import io.graversen.minecraft.rcon.JsonUtils;
 import io.graversen.minecraft.rcon.commands.base.BaseTargetedCommand;
 import io.graversen.minecraft.rcon.util.Target;
-import org.apache.commons.text.StringSubstitutor;
-
-import java.util.Map;
 
 public class TitleCommand extends BaseTargetedCommand {
     private transient final String position;
@@ -73,12 +70,9 @@ public class TitleCommand extends BaseTargetedCommand {
 
     @Override
     public String command() {
-        final var variables = Map.of(
-                "target", getTarget(),
-                "position", getPosition(),
-                "titleJson", JsonUtils.toJson(this)
-        );
-
-        return StringSubstitutor.replace("title ${target} ${position} ${titleJson}", variables);
+        return  "title " +
+                getTarget() + " " +
+                getPosition() + " " +
+                JsonUtils.toJson(this);
     }
 }

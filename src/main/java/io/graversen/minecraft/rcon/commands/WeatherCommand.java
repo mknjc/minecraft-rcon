@@ -2,10 +2,8 @@ package io.graversen.minecraft.rcon.commands;
 
 import io.graversen.minecraft.rcon.commands.base.ICommand;
 import io.graversen.minecraft.rcon.util.Weathers;
-import org.apache.commons.text.StringSubstitutor;
 
 import java.time.Duration;
-import java.util.Map;
 import java.util.Objects;
 
 public class WeatherCommand implements ICommand {
@@ -34,11 +32,6 @@ public class WeatherCommand implements ICommand {
 
     @Override
     public String command() {
-        final var variables = Map.of(
-                "weather", getWeather().getWeatherString(),
-                "duration", getDuration()
-        );
-
-        return StringSubstitutor.replace("weather ${weather} ${duration}", variables);
+        return "weather " + getWeather().getWeatherString() + " " + getDuration();
     }
 }

@@ -3,9 +3,6 @@ package io.graversen.minecraft.rcon.commands.tellraw;
 import io.graversen.minecraft.rcon.JsonUtils;
 import io.graversen.minecraft.rcon.commands.base.BaseTargetedCommand;
 import io.graversen.minecraft.rcon.util.Target;
-import org.apache.commons.text.StringSubstitutor;
-
-import java.util.Map;
 
 public class TellRawCommand extends BaseTargetedCommand {
     private final String text;
@@ -80,12 +77,7 @@ public class TellRawCommand extends BaseTargetedCommand {
 
     @Override
     public String command() {
-        final var variables = Map.of(
-                "target", getTarget(),
-                "rawJson", JsonUtils.toJson(this)
-        );
-
-        return StringSubstitutor.replace("tellraw ${target} ${rawJson}", variables);
+        return "tellraw " + getTarget() + " " + JsonUtils.toJson(this);
     }
 
     public TextContent toTextContent() {

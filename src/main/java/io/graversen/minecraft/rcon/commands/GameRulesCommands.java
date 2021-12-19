@@ -2,9 +2,7 @@ package io.graversen.minecraft.rcon.commands;
 
 import io.graversen.minecraft.rcon.commands.base.ICommand;
 import io.graversen.minecraft.rcon.util.GameRules;
-import org.apache.commons.text.StringSubstitutor;
 
-import java.util.Map;
 import java.util.Objects;
 
 public class GameRulesCommands {
@@ -32,21 +30,12 @@ public class GameRulesCommands {
         Objects.requireNonNull(gameRule);
         Objects.requireNonNull(value);
 
-        return () -> StringSubstitutor.replace(
-                "gamerule ${gamerule} ${value}",
-                Map.of(
-                        "gamerule", gameRule,
-                        "value", value
-                )
-        );
+        return () -> "gamerule " + gameRule + " " + value;
     }
 
     private static ICommand getGameRule(String gameRule) {
         Objects.requireNonNull(gameRule);
 
-        return () -> StringSubstitutor.replace(
-                "gamerule ${gamerule}",
-                Map.of("gamerule", gameRule)
-        );
+        return () -> "gamerule " + gameRule;
     }
 }

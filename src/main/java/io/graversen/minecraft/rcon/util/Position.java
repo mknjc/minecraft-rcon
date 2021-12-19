@@ -1,9 +1,5 @@
 package io.graversen.minecraft.rcon.util;
 
-import org.apache.commons.text.StringSubstitutor;
-
-import java.util.Map;
-
 public class Position {
     private final Coordinate x;
     private final Coordinate y;
@@ -45,13 +41,6 @@ public class Position {
 
     @Override
     public String toString() {
-        return StringSubstitutor.replace(
-                "${x} ${y} ${z}",
-                Map.of(
-                        "x", getX().coordinate(),
-                        "y", getY().coordinate(),
-                        "z", getZ().coordinate()
-                )
-        );
+        return getX().coordinate() + " " + getY().coordinate() + " " + getZ().coordinate();
     }
 }
